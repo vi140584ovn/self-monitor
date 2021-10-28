@@ -27,8 +27,11 @@ def init():
     for line in command_output:
         print(line)
 
-    command_ansible = f'ansible-galaxy collection install community.mysql;' \
-                      f'cd {path_ansible}; ansible-playbook -i hosts --private-key {path_vagrant}/{private_key} Install_Env.yml'
+    command_output = subprocess.check_output('ansible-galaxy collection install community.mysql', shell=True).decode("utf8").split("\n")
+    for line in command_output:
+        print(line)
+
+    command_ansible = f'cd {path_ansible}; ansible-playbook -i hosts --private-key {path_vagrant}/{private_key} Install_Env.yml'
     command_output = subprocess.check_output(f'{command_ansible}', shell=True).decode("utf8").split("\n")
     for line in command_output:
         print(line)
