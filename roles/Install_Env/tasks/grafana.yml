@@ -25,7 +25,7 @@
     state: started
 
 - name: Check port 3000
-  shell: curl --insecure -sw '%{http_code}' -o /dev/null https://localhost
+  shell: curl --insecure -sw '%{http_code}' -o /dev/null https://localhost/grafana
   register: output
   until: output.stdout.find("503") == -1
   retries: 5
