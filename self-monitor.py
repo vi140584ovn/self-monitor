@@ -44,7 +44,8 @@ def stop():
         print(line)
 
 def destroy():
-    command_output = subprocess.check_output(f'cd {path_vagrant}; vagrant destroy -f', shell=True).decode("utf8").split("\n")
+    command_output = subprocess.check_output(f'cd {path_vagrant}; vagrant destroy -f; rm -rf {path_vagrant}; '
+                                             f'rm -rf ../self-monitor', shell=True).decode("utf8").split("\n")
     for line in command_output:
         print(line)
 
