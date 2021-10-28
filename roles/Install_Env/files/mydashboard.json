@@ -552,8 +552,8 @@
     "list": []
   },
   "time": {
-    "from": "2021-10-28T05:58:29.653Z",
-    "to": "2021-10-28T11:58:29.653Z"
+    "from": "now-3h",
+    "to": "now"
   },
   "timepicker": {},
   "timezone": "",
