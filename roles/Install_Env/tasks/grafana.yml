@@ -34,7 +34,7 @@
 - name: Create graphite datasource
   grafana_datasource:
     name: my_graphite
-    grafana_url: https://localhost
+    grafana_url: https://localhost/grafana
     ds_type: graphite
     ds_url: http://localhost:8080
     state: present
@@ -47,7 +47,7 @@
 
 - name: Import Grafana dashboard foo
   grafana_dashboard:
-    grafana_url: https://localhost
+    grafana_url: https://localhost/grafana
     state: present
     overwrite: yes
     path: /root/mydashboard.json
