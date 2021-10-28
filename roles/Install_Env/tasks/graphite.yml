@@ -1,0 +1,22 @@
+- name: install graphite
+  apt:
+    name: "{{ item }}" 
+    state: present
+  loop:
+    - graphite-web
+    - graphite-carbon
+
+- name: Copy carbon conf
+  copy:
+    src: storage-schemas.conf
+    dest: /etc/carbon
+
+- name: migrate db
+  shell: |
+    sudo -u _graphite graphite-manage migrate --run-syncdb
+    sed -i "s/SECRET_KEY =.*/SECRET_KEY = 'aqereasdrwhgasfaefsd'/g" /etc/graphite/local_settings.py
+    sed -i "s/CARBON_CACHE_ENABLED=false/CARBON_CACHE_ENABLED=true/g" /etc/default/graphite-carbon
+- name: restart carbon
+  service:
+    name: carbon-cache 
+    state: restarted

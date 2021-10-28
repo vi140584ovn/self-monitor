@@ -1,0 +1,49 @@
+- name: install Apache and others
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop: 
+  - apache2 
+  - libapache2-mod-wsgi
+
+- name: enable Apache
+  service:
+    name: apache2
+    enabled: yes
+
+- name: Enable the Apache2 modules proxy rewrite proxy_http ssl
+  apache2_module:
+    state: present
+    name: "{{ item }}"
+  loop:
+  - proxy
+  - rewrite
+  - proxy_http
+  - ssl
+  - wsgi
+
+- name: Copy apache conf
+  copy:
+    src: default-ssl.conf
+    dest: /etc/apache2/sites-available
+
+- name: Copy graphite conf
+  copy:
+    src: apache2-graphite.conf
+    dest: /etc/apache2/sites-available
+
+- name: Copy ports conf
+  copy:
+    src: ports.conf
+    dest: /etc/apache2/
+
+- name: Enable new site
+  shell: a2ensite "{{ item }}"
+  loop:
+  - apache2-graphite
+  - default-ssl
+
+- name: restart Apache
+  service:
+    name: apache2
+    state: restarted

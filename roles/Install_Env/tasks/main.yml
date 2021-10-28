@@ -1,0 +1,12 @@
+---
+# tasks file for Install_Env
+
+- include_tasks: mysql.yml
+
+- include_tasks: collectd.yml
+
+- include_tasks: graphite.yml
+
+- include_tasks: apache.yml
+
+- include_tasks: grafana.yml

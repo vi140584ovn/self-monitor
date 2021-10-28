@@ -1,0 +1,54 @@
+- name: Download Grafana
+  shell: |
+     wget -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add -
+     add-apt-repository "deb https://packages.grafana.com/oss/deb stable main"
+     apt update
+
+- name: install Grafana
+  apt:
+    name: grafana
+    state: present
+
+- name: enable Grafana
+  service:
+    name: grafana-server
+    enabled: yes
+
+- name: Copy grafana conf
+  copy:
+    src: defaults.ini
+    dest: /usr/share/grafana/conf
+
+- name: start Grafana
+  service:
+    name: grafana-server
+    state: started
+
+- name: Check port 3000
+  shell: curl --insecure -sw '%{http_code}' -o /dev/null https://localhost
+  register: output
+  until: output.stdout.find("503") == -1
+  retries: 5
+  delay: 15
+
+- name: Create graphite datasource
+  grafana_datasource:
+    name: my_graphite
+    grafana_url: https://localhost
+    ds_type: graphite
+    ds_url: http://localhost:8080
+    state: present
+    validate_certs: no
+
+- name: Copy dashboard json
+  copy:
+    src: mydashboard.json
+    dest: /root/mydashboard.json
+
+- name: Import Grafana dashboard foo
+  grafana_dashboard:
+    grafana_url: https://localhost
+    state: present
+    overwrite: yes
+    path: /root/mydashboard.json
+    validate_certs: no

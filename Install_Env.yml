@@ -1,0 +1,7 @@
+---
+- name: Install_Env
+  hosts: all
+  become: true
+
+  roles:
+    - Install_Env

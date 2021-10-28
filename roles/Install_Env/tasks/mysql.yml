@@ -1,0 +1,32 @@
+- name: install python3-pymysql
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+  loop:
+  - python3-pymysql
+  - python-pymysql
+  - python-pip
+
+- name: install Mysql
+  apt:
+    name: mysql-server
+    state: present
+
+- name: enable Mysql
+  service:
+    name: mysql
+    enabled: yes
+
+- name: Create a new database with name grafana
+  community.mysql.mysql_db:
+    name: grafana
+    state: present
+    config_file: "{{ config_file }}"
+
+- name: Create database user with name grafana' and password with grafana database privileges
+  mysql_user:
+    name: grafana
+    password: "{{ password }}"
+    priv: 'grafana.*:ALL'
+    state: present
+    config_file: "{{ config_file }}"

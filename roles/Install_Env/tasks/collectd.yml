@@ -1,0 +1,19 @@
+- name: install Collectd
+  apt:
+    name: collectd
+    state: present
+
+- name: enable Collectd
+  service:
+    name: collectd
+    enabled: yes
+
+- name: Copy collect conf
+  copy:
+    src: mycollect.conf
+    dest: /etc/collectd/collectd.conf.d
+
+- name: restart collectd
+  service:
+    name: collectd
+    state: restarted
