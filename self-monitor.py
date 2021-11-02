@@ -4,7 +4,7 @@ import subprocess
 import os
 
 path_vagrant = '~/self_monitor_vagrant'
-path_ansible = './'
+path_ansible = '~/self-monitor'
 o_s = 'ubuntu/bionic64'
 private_key = '.vagrant/machines/default/virtualbox/private_key'
 vagrantfile = f'{os.path.expanduser(path_vagrant)}/Vagrantfile'

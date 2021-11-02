@@ -24,5 +24,5 @@ Ansible playbook requirements:
  - Grafana needs to be available under /grafana location
 Please provide git repo or link on github with task described above
 The test is considered passed if we are able to get result through the following commands:
-1) git clone https://github.com/username/self-monitor.git
-2) python3 ./self-monitor/self-monitor.py init
+1) git clone https://github.com/vi140584ovn/self-monitor.git
+2) python3 ./self-monitor/self-monitor.py Init
