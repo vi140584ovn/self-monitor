@@ -12,45 +12,32 @@ vagrantfile = f'{os.path.expanduser(path_vagrant)}/Vagrantfile'
 parser = argparse.ArgumentParser()
 parser.add_argument("argument", choices=['Init', 'Start', 'Stop', 'Destroy'], type=str, help="Init Stop Start Destroy")
 
-def init():
-    command_line = f'mkdir -p {path_vagrant}; cd {path_vagrant}; rm -rf Vagrantfile; vagrant box add {o_s}; vagrant init {o_s}; vagrant up'
+def cmd(command_line):
     command_output = subprocess.check_output(f'{command_line}', shell=True).decode("utf8").split("\n")
     for line in command_output:
         print(line)
+
+def init():
+    cmd(f'mkdir -p {path_vagrant}; cd {path_vagrant}; rm -rf Vagrantfile; vagrant box add {o_s}; '
+        f'vagrant init {o_s}; vagrant up')
     with open(vagrantfile) as f:
         l_line = f.readlines()
     l_line.insert(-1, 'config.vm.network "forwarded_port", guest: 80, host: 80\n'
                       'config.vm.network "forwarded_port", guest: 443, host: 443\n')
     with open(vagrantfile, 'w') as f:
         f.writelines(l_line)
-    command_output = subprocess.check_output(f'cd {path_vagrant}; vagrant reload', shell=True).decode("utf8").split("\n")
-    for line in command_output:
-        print(line)
-
-    command_output = subprocess.check_output('ansible-galaxy collection install community.mysql', shell=True).decode("utf8").split("\n")
-    for line in command_output:
-        print(line)
-
-    command_ansible = f'cd {path_ansible}; ansible-playbook -i hosts --private-key {path_vagrant}/{private_key} Install_Env.yml 1>&2'
-    command_output = subprocess.check_output(f'{command_ansible}', shell=True).decode("utf8").split("\n")
-    for line in command_output:
-        print(line)
+    cmd(f'cd {path_vagrant}; vagrant reload')
+    cmd('ansible-galaxy collection install community.mysql')
+    cmd(f'cd {path_ansible}; ansible-playbook -i hosts --private-key {path_vagrant}/{private_key} Install_Env.yml 1>&2')
 
 def start():
-    command_output = subprocess.check_output(f'cd {path_vagrant}; vagrant up', shell=True).decode("utf8").split("\n")
-    for line in command_output:
-        print(line)
+    cmd(f'cd {path_vagrant}; vagrant up')
 
 def stop():
-    command_output = subprocess.check_output(f'cd {path_vagrant}; vagrant halt', shell=True).decode("utf8").split("\n")
-    for line in command_output:
-        print(line)
+    cmd(f'cd {path_vagrant}; vagrant halt')
 
 def destroy():
-    command_output = subprocess.check_output(f'cd {path_vagrant}; vagrant destroy -f; rm -rf {path_vagrant}; '
-                                             f'rm -rf ../self-monitor', shell=True).decode("utf8").split("\n")
-    for line in command_output:
-        print(line)
+    cmd(f'cd {path_vagrant}; vagrant destroy -f; rm -rf {path_vagrant}; rm -rf ../self-monitor')
 
 arguments = {
     'Init': getattr(sys.modules[__name__], 'init'),
