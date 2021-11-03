@@ -29,6 +29,7 @@ def init():
     cmd(f'cd {path_vagrant}; vagrant reload')
     cmd('ansible-galaxy collection install community.mysql')
     cmd(f'cd {path_ansible}; ansible-playbook -i hosts --private-key {path_vagrant}/{private_key} Install_Env.yml 1>&2')
+    print("use the following link https://localhost/grafana/d/z80i2GK7z/my_bord?orgId=1")
 
 def start():
     cmd(f'cd {path_vagrant}; vagrant up')
