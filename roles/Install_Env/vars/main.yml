@@ -2,4 +2,4 @@
 # vars file for Install_Env
 
 config_file: '/etc/mysql/debian.cnf'
-password: 'xlebor1984'
+password: '123456789'
